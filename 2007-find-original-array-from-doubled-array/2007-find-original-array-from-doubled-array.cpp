@@ -1,28 +1,21 @@
 class Solution {
 public:
-    vector<int> findOriginalArray(vector<int>& arr) {
-       unordered_map<int, int> map;
-        for(int num : arr){
-            map[num]++;
-        }
-        
-        sort(arr.begin(), arr.end());
-        
-        vector<int> res;
-        for(int ele: arr){
-            if(map.find(ele * 2) != map.end() && map[ele] != 0 && map[ele * 2] != 0){
-                map[ele]--;
-                map[ele * 2]--;
-                res.push_back(ele);
+    vector<int> findOriginalArray(vector<int>& changed) {
+      int n = changed.size();
+        vector<int> result;
+        sort(begin(changed), end(changed));
+        for(int i = 0; i<n; i++) {
+            int num = changed[i];
+            if(num < 0) continue;
+            auto idx = lower_bound(begin(changed)+i+1, end(changed), 2*num);
+            if(idx != end(changed) && *idx == 2*num) {
+                *idx = -1; //mark it
+                result.push_back(num); //found it
+            } else {
+                return {}; //oooops
             }
         }
         
-        for(auto i : map){
-            if(i.second != 0){
-                return vector<int>();
-            }
-        }
-        
-        return res;
+        return result;
     }
 };
