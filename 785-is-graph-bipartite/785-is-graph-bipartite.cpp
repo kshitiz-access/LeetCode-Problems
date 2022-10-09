@@ -19,11 +19,30 @@ public:
         }
         return true;
     }
+    bool dfs(vector<vector<int>> arr,vector<int>& flag,int ind,int col)
+    {
+        flag[ind]=col;
+        for(int x: arr[ind])
+        {
+            if(flag[x] ==-1)
+            {
+                if(dfs(arr,flag,x,!col) ==false)
+                    return false;
+                
+                
+            }
+            else if(flag[x] == col)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
     bool isBipartite(vector<vector<int>>& g) {
         vector<int> flag(g.size(),-1);
         for(int i=0;i<g.size();i++){
             if(flag[i]==-1){
-                if(!bfs(g,flag,i))return false;
+                if(!dfs(g,flag,i,0))return false;
             }
         }
         return true;
