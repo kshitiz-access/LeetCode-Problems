@@ -29,7 +29,39 @@ public:
         
         int n=s1.size();
         int m=s2.size();
-        vector<vector<int>> dp(m+1,vector<int> (n+1,-1));
-        return f(m,n,s2,s1,dp);
+        vector<vector<int>> dp(m+1,vector<int> (n+1,0));
+        // return f(m,n,s2,s1,dp);
+        dp[0][0]=1;
+        for(int j=1;j<=n;j++) dp[0][j]=0;
+        for(int i=1;i<=m;i++)
+        {
+            int f=1;
+             for(int k=1;k<=i;k++)
+            {
+                if(s2[k-1] != '*')
+                {
+                    f=0;
+                    break;
+                }
+            }
+            dp[i][0]=f;
+        }
+        
+        for(int i=1;i<=m;i++)
+        {
+            for(int j=1;j<=n;j++)
+            {
+                if(s2[i-1] == s1[j-1] || s2[i-1] == '?')
+                     dp[i][j]= dp[i-1][j-1];
+                
+                else if(s2[i-1] == '*')
+                {
+                    dp[i][j] = dp[i-1][j] || dp[i][j-1];
+                }
+                else
+                    dp[i][j] = 0;
+            }
+        }
+        return dp[m][n];
     }
 };
